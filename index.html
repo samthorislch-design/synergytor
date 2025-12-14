@@ -125,6 +125,14 @@
             opacity: 0.9;
         }
 
+        .admin-badge {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+
         .logout-btn {
             background: rgba(255, 255, 255, 0.2);
             color: white;
@@ -234,12 +242,6 @@
             text-overflow: ellipsis;
         }
 
-        .message-item-time {
-            font-size: 11px;
-            color: #ccc;
-            margin-left: 8px;
-        }
-
         /* 联系人列表 */
         .contacts-list {
             flex: 1;
@@ -281,7 +283,7 @@
             margin-top: 2px;
         }
 
-        /* 发现和个人资料 */
+        /* Tab 内容 */
         .tab-content {
             display: none;
             flex: 1;
@@ -294,12 +296,14 @@
             flex-direction: column;
         }
 
+        /* 发现页面 */
         .discover-text {
             color: #666;
             font-size: 14px;
             line-height: 1.8;
         }
 
+        /* 资料页面 */
         .profile-info {
             background: #f5f5f5;
             border-radius: 8px;
@@ -317,6 +321,103 @@
             font-size: 14px;
             color: #333;
             font-weight: 500;
+            word-wrap: break-word;
+        }
+
+        .profile-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #003d99 0%, #0052cc 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .profile-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #003d99;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .modal-btn-save {
+            background: linear-gradient(135deg, #003d99 0%, #0052cc 100%);
+            color: white;
+        }
+
+        .modal-btn-cancel {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal-btn:hover {
+            opacity: 0.9;
         }
 
         /* 右侧聊天区 */
@@ -353,6 +454,8 @@
             overflow-y: auto;
             padding: 15px;
             background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-message {
@@ -385,26 +488,29 @@
             padding: 10px 14px;
             border-radius: 18px;
             font-size: 13px;
-            line-height: 1.4;
+            line-height: 1.5;
             word-wrap: break-word;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
         }
 
         .chat-message.sent .message-bubble {
             background: #95ec69;
             color: #333;
+            border-bottom-right-radius: 4px;
         }
 
         .chat-message.received .message-bubble {
             background: white;
             color: #333;
             border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
         }
 
         .message-time {
             font-size: 11px;
             color: #ccc;
             margin-top: 4px;
-            text-align: center;
         }
 
         /* 输入框 */
@@ -423,6 +529,7 @@
             border-radius: 20px;
             font-size: 13px;
             background: #f5f5f5;
+            resize: none;
         }
 
         .chat-input-area input:focus {
@@ -460,6 +567,56 @@
         .hidden {
             display: none !important;
         }
+
+        .admin-section {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .admin-section-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .user-list {
+            background: white;
+            border-radius: 6px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .user-item-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .user-item-delete {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .user-item-delete:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -471,7 +628,7 @@
             
             <div class="input-group">
                 <label>Username</label>
-                <input type="text" id="username" placeholder="alice, bob, or chen" value="alice">
+                <input type="text" id="username" placeholder="alice, bob, chen, or admin" value="alice">
             </div>
             
             <div class="input-group">
@@ -480,6 +637,10 @@
             </div>
             
             <button class="login-btn" onclick="login()">Sign In</button>
+            
+            <p style="margin-top: 20px; color: #999; font-size: 12px;">
+                👑 Admin: username=admin, password=123456
+            </p>
         </div>
     </div>
 
@@ -491,7 +652,10 @@
             <div class="sidebar-header">
                 <div>
                     <div class="sidebar-title">💬 Synergytor</div>
-                    <div class="sidebar-user" id="sidebarUser">alice</div>
+                    <div class="sidebar-user">
+                        <span id="sidebarUser">alice</span>
+                        <span id="adminBadge" class="admin-badge" style="display:none;">👑 ADMIN</span>
+                    </div>
                 </div>
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
@@ -520,7 +684,7 @@
                         <p style="margin-top: 10px;">✅ Node.js Backend<br>
                         ✅ Vercel Frontend<br>
                         ✅ ngrok Tunneling<br>
-                        ✅ Real-time Messaging</p>
+                        ✅ Admin Profile Management</p>
                     </div>
                 </div>
             </div>
@@ -528,16 +692,30 @@
             <!-- Profile Tab -->
             <div id="profileTab" class="tab-content" style="display: none;">
                 <div class="profile-info">
+                    <div class="profile-label">Name</div>
+                    <div class="profile-value" id="profileName">Alice</div>
+                </div>
+                <div class="profile-info">
                     <div class="profile-label">Username</div>
                     <div class="profile-value" id="profileUsername">alice</div>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-label">About</div>
+                    <div class="profile-value" id="profileAbout">Hello!</div>
                 </div>
                 <div class="profile-info">
                     <div class="profile-label">Status</div>
                     <div class="profile-value">🟢 Online</div>
                 </div>
-                <div class="profile-info">
-                    <div class="profile-label">About</div>
-                    <div class="profile-value">Welcome to Synergytor!</div>
+                <button class="profile-btn" onclick="openEditModal()">Edit Profile</button>
+
+                <!-- 管理员部分 -->
+                <div id="adminSection" class="admin-section" style="display:none;">
+                    <div class="admin-section-title">👑 Admin Management</div>
+                    <button class="profile-btn" onclick="openAddUserModal()" style="margin-top: 0;">➕ Add New User</button>
+                    
+                    <div class="admin-section-title" style="margin-top: 15px;">All Users</div>
+                    <div class="user-list" id="usersList"></div>
                 </div>
             </div>
 
@@ -570,6 +748,37 @@
         </div>
     </div>
 
+    <!-- 编辑资料模态框 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">Edit Profile</div>
+            
+            <input type="text" id="editName" class="modal-input" placeholder="Name">
+            <input type="text" id="editAbout" class="modal-input" placeholder="About">
+            
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-save" onclick="saveProfile()">Save</button>
+                <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加新用户模态框 -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">➕ Add New User</div>
+            
+            <input type="text" id="newUsername" class="modal-input" placeholder="Username (required)">
+            <input type="text" id="newName" class="modal-input" placeholder="Name">
+            <input type="text" id="newAbout" class="modal-input" placeholder="About">
+            
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-save" onclick="addNewUser()">Add User</button>
+                <button class="modal-btn modal-btn-cancel" onclick="closeAddUserModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ========== 配置 ==========
         const SERVER_URL = 'https://utilizable-maci-trunkless.ngrok-free.dev';
@@ -577,8 +786,13 @@
         
         // ========== 全局变量 ==========
         let currentUser = null;
+        let isCurrentUserAdmin = false;
         let allMessages = [];
         let selectedContact = null;
+        let currentProfile = null;
+        let allProfiles = {};
+        let lastMessageCount = 0;
+        let lastMessagesList = {};
 
         // ========== 登录 ==========
         function login() {
@@ -599,12 +813,12 @@
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
             document.getElementById('sidebarUser').textContent = username;
-            document.getElementById('profileUsername').textContent = username;
 
+            checkAdminStatus();
+            loadProfile();
             loadMessages();
             loadContacts();
             
-            // 默认选择第一个联系人
             const otherContacts = CONTACTS.filter(c => c !== currentUser);
             if (otherContacts.length > 0) {
                 setTimeout(() => selectContact(otherContacts[0]), 500);
@@ -613,12 +827,225 @@
             setInterval(loadMessages, 2000);
         }
 
+        // ========== 检查管理员状态 ==========
+        async function checkAdminStatus() {
+            try {
+                const response = await fetch(`${SERVER_URL}/api/check-admin/${currentUser}`, {
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
+                const data = await response.json();
+                isCurrentUserAdmin = data.isAdmin;
+                
+                if (isCurrentUserAdmin) {
+                    document.getElementById('adminBadge').style.display = 'inline-block';
+                    document.getElementById('adminSection').style.display = 'block';
+                    loadAllUsers();
+                }
+            } catch (error) {
+                console.error('❌ Error checking admin status:', error);
+            }
+        }
+
+        // ========== 加载所有用户 ==========
+        async function loadAllUsers() {
+            try {
+                const response = await fetch(`${SERVER_URL}/api/profiles`, {
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
+                allProfiles = await response.json();
+                updateUsersList();
+            } catch (error) {
+                console.error('❌ Error loading users:', error);
+            }
+        }
+
+        // ========== 更新用户列表 ==========
+        function updateUsersList() {
+            const list = document.getElementById('usersList');
+            let html = '';
+            
+            Object.keys(allProfiles).forEach(username => {
+                html += `
+                    <div class="user-item">
+                        <span class="user-item-name">${username}</span>
+                        <button class="user-item-delete" onclick="deleteUser('${username}')">Delete</button>
+                    </div>
+                `;
+            });
+            
+            list.innerHTML = html || '<div style="padding:10px; text-align:center; color:#999;">No users</div>';
+        }
+
         // ========== 登出 ==========
         function logout() {
             currentUser = null;
+            isCurrentUserAdmin = false;
             selectedContact = null;
             document.getElementById('appScreen').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        // ========== 加载用户资料 ==========
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${SERVER_URL}/api/profile/${currentUser}`, {
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
+                
+                if (response.ok) {
+                    currentProfile = await response.json();
+                    updateProfileDisplay();
+                }
+            } catch (error) {
+                console.error('❌ Error loading profile:', error);
+            }
+        }
+
+        // ========== 更新资料显示 ==========
+        function updateProfileDisplay() {
+            if (!currentProfile) return;
+            
+            document.getElementById('profileName').textContent = currentProfile.name || currentUser;
+            document.getElementById('profileUsername').textContent = currentProfile.username || currentUser;
+            document.getElementById('profileAbout').textContent = currentProfile.about || 'No bio yet';
+            
+            document.getElementById('editName').value = currentProfile.name || currentUser;
+            document.getElementById('editAbout').value = currentProfile.about || '';
+        }
+
+        // ========== 打开编辑资料模态框 ==========
+        function openEditModal() {
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        // ========== 关闭编辑资料模态框 ==========
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        // ========== 保存资料 ==========
+        async function saveProfile() {
+            const name = document.getElementById('editName').value.trim();
+            const about = document.getElementById('editAbout').value.trim();
+            
+            if (!name) {
+                alert('Name cannot be empty');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${SERVER_URL}/api/profile/${currentUser}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        about: about,
+                        status: 'Online'
+                    })
+                });
+                
+                if (response.ok) {
+                    currentProfile = await response.json();
+                    updateProfileDisplay();
+                    closeEditModal();
+                    alert('✅ Profile saved successfully!');
+                }
+            } catch (error) {
+                console.error('❌ Error saving profile:', error);
+                alert('Error saving profile');
+            }
+        }
+
+        // ========== 打开添加用户模态框 ==========
+        function openAddUserModal() {
+            if (!isCurrentUserAdmin) {
+                alert('Only administrators can add users');
+                return;
+            }
+            document.getElementById('addUserModal').classList.add('active');
+        }
+
+        // ========== 关闭添加用户模态框 ==========
+        function closeAddUserModal() {
+            document.getElementById('addUserModal').classList.remove('active');
+        }
+
+        // ========== 添加新用户 ==========
+        async function addNewUser() {
+            if (!isCurrentUserAdmin) {
+                alert('Only administrators can add users');
+                return;
+            }
+
+            const username = document.getElementById('newUsername').value.trim();
+            const name = document.getElementById('newName').value.trim();
+            const about = document.getElementById('newAbout').value.trim();
+            
+            if (!username) {
+                alert('Username is required');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${SERVER_URL}/api/profile/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true',
+                    },
+                    body: JSON.stringify({
+                        adminUser: currentUser,
+                        username: username,
+                        name: name || username,
+                        about: about
+                    })
+                });
+                
+                if (response.ok) {
+                    closeAddUserModal();
+                    await loadAllUsers();
+                    alert(`✅ User "${username}" added successfully!`);
+                } else {
+                    const error = await response.json();
+                    alert('❌ ' + error.error);
+                }
+            } catch (error) {
+                console.error('❌ Error adding user:', error);
+                alert('Error adding user');
+            }
+        }
+
+        // ========== 删除用户 ==========
+        async function deleteUser(username) {
+            if (!isCurrentUserAdmin) {
+                alert('Only administrators can delete users');
+                return;
+            }
+
+            if (!confirm(`Delete user "${username}"? This cannot be undone!`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${SERVER_URL}/api/profile/${username}?admin=${currentUser}`, {
+                    method: 'DELETE',
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
+                
+                if (response.ok) {
+                    await loadAllUsers();
+                    alert(`✅ User "${username}" deleted!`);
+                } else {
+                    const error = await response.json();
+                    alert('❌ ' + error.error);
+                }
+            } catch (error) {
+                console.error('❌ Error deleting user:', error);
+                alert('Error deleting user');
+            }
         }
 
         // ========== 切换 Tab ==========
@@ -627,21 +1054,25 @@
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             
             const tabEl = document.getElementById(tabName + 'Tab');
-            tabEl.style.display = tabName === 'messages' ? 'flex' : 'flex';
-            if (tabName !== 'messages') {
-                tabEl.style.flexDirection = 'column';
-            }
+            tabEl.style.display = 'flex';
             event.target.classList.add('active');
         }
 
-        // ========== 加载消息 ==========
+        // ========== 加载消息（只在有新消息时更新） ==========
         async function loadMessages() {
             try {
                 const response = await fetch(`${SERVER_URL}/api/messages`, {
                     headers: { 'ngrok-skip-browser-warning': 'true' }
                 });
                 allMessages = await response.json();
-                updateMessagesList();
+                
+                // 只有在消息数量改变时才更新列表
+                if (allMessages.length !== lastMessageCount) {
+                    lastMessageCount = allMessages.length;
+                    updateMessagesList();
+                }
+                
+                // 只有在选中联系人的消息改变时才更新聊天框
                 if (selectedContact) {
                     updateChatMessages();
                 }
@@ -702,9 +1133,8 @@
                     <div class="message-item ${isActive}" data-contact="${contact}" onclick="selectContact('${contact}')">
                         <div class="message-item-info">
                             <div class="message-item-name">${contact.charAt(0).toUpperCase() + contact.slice(1)}</div>
-                            <div class="message-item-text">${lastMsg}</div>
+                            <div class="message-item-text">${lastMsg.substring(0, 30)}</div>
                         </div>
-                        <div class="message-item-time">now</div>
                     </div>
                 `;
             });
@@ -712,7 +1142,7 @@
             listDiv.innerHTML = html || '<div class="empty-state">No messages</div>';
         }
 
-        // ========== 更新聊天消息 ==========
+        // ========== 更新聊天消息（智能更新，不闪烁） ==========
         function updateChatMessages() {
             if (!selectedContact) return;
             
@@ -723,6 +1153,14 @@
                 (m.from === currentUser && m.to === selectedContact) || 
                 (m.from === selectedContact && m.to === currentUser)
             );
+            
+            // 如果消息完全相同，不更新（避免闪烁）
+            const msgKey = selectedContact;
+            if (lastMessagesList[msgKey] === msgs.length) {
+                return;
+            }
+            
+            lastMessagesList[msgKey] = msgs.length;
             
             if (msgs.length === 0) {
                 chatDiv.innerHTML = '<div class="empty-state">No messages yet<br>Start the conversation!</div>';
@@ -800,6 +1238,14 @@
         window.addEventListener('load', () => {
             console.log('✅ App loaded');
             console.log('📡 Server:', SERVER_URL);
+        });
+
+        // 关闭模态框
+        document.addEventListener('click', (e) => {
+            const editModal = document.getElementById('editModal');
+            const addUserModal = document.getElementById('addUserModal');
+            if (e.target === editModal) closeEditModal();
+            if (e.target === addUserModal) closeAddUserModal();
         });
     </script>
 </body>
