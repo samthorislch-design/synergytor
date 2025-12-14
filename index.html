@@ -90,10 +90,6 @@
             transform: translateY(-2px);
         }
 
-        .login-btn:active {
-            transform: translateY(0);
-        }
-
         .app-screen {
             background: white;
             border-radius: 12px;
@@ -101,13 +97,13 @@
             box-shadow: 0 10px 40px rgba(0, 26, 77, 0.2);
             display: flex;
             flex-direction: column;
-            height: 600px;
+            height: 700px;
         }
 
         .header {
             background: linear-gradient(135deg, #001a4d 0%, #003d99 100%);
             color: white;
-            padding: 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -119,7 +115,7 @@
         }
 
         .header-user {
-            font-size: 12px;
+            font-size: 11px;
             opacity: 0.9;
         }
 
@@ -138,108 +134,291 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
+        .nav-tabs {
+            display: flex;
             background: #f5f5f5;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0;
         }
 
-        .message {
-            margin-bottom: 15px;
+        .nav-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 12px;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab.active {
+            color: #003d99;
+            border-bottom-color: #003d99;
+            background: white;
+        }
+
+        .nav-tab:hover {
+            color: #003d99;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow: hidden;
             display: flex;
         }
 
-        .message.sent {
+        .tab-content {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Messages Tab */
+        .messages-list {
+            flex: 1;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+            background: #f9f9f9;
+        }
+
+        .message-item {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .message-item:hover {
+            background: #f0f0f0;
+        }
+
+        .message-item.active {
+            background: white;
+            border-right: 3px solid #003d99;
+        }
+
+        .message-item-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .message-item-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-area {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .chat-header {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #f5f5f5;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f5f5f5;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            display: flex;
+        }
+
+        .chat-message.sent {
             justify-content: flex-end;
         }
 
-        .message.received {
+        .chat-message.received {
             justify-content: flex-start;
         }
 
         .message-bubble {
             max-width: 70%;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.4;
             word-wrap: break-word;
         }
 
-        .message.sent .message-bubble {
+        .chat-message.sent .message-bubble {
             background: #003d99;
             color: white;
             border-bottom-right-radius: 4px;
         }
 
-        .message.received .message-bubble {
+        .chat-message.received .message-bubble {
             background: #e0e0e0;
             color: #333;
             border-bottom-left-radius: 4px;
         }
 
-        .message-time {
-            font-size: 11px;
-            color: #999;
-            margin-top: 4px;
-            padding: 0 8px;
-        }
-
-        .input-container {
-            padding: 15px;
+        .chat-input-area {
+            padding: 12px;
             background: white;
             border-top: 1px solid #e0e0e0;
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .input-container input {
+        .chat-input-area input {
             flex: 1;
-            padding: 10px 15px;
+            padding: 10px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
+            font-size: 13px;
         }
 
-        .input-container input:focus {
+        .chat-input-area input:focus {
             outline: none;
             border-color: #003d99;
         }
 
-        .send-btn {
+        .chat-send-btn {
             background: linear-gradient(135deg, #003d99 0%, #0052cc 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 16px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: transform 0.2s;
+            font-size: 12px;
         }
 
-        .send-btn:hover {
-            transform: translateY(-2px);
+        .chat-send-btn:hover {
+            opacity: 0.9;
         }
 
-        .send-btn:active {
-            transform: translateY(0);
+        /* Contacts Tab */
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .contact-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            border-color: #003d99;
+            box-shadow: 0 2px 8px rgba(0, 26, 77, 0.1);
+        }
+
+        .contact-avatar {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .contact-status {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* Discover Tab */
+        .discover-content {
+            padding: 20px;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        .discover-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .discover-text {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Profile Tab */
+        .profile-content {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .profile-section {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .profile-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .profile-value {
+            color: #666;
+            font-size: 14px;
         }
 
         .hidden {
             display: none !important;
         }
 
-        .emoji {
-            font-size: 24px;
+        .status {
+            padding: 15px;
+            text-align: center;
+            color: #999;
+            font-size: 13px;
         }
 
-        .status {
-            font-size: 12px;
-            color: #999;
-            padding: 10px;
-            text-align: center;
+        @media (max-width: 600px) {
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .message-bubble {
+                max-width: 85%;
+            }
         }
     </style>
 </head>
@@ -267,7 +446,7 @@
             </p>
         </div>
 
-        <!-- 聊天页面 -->
+        <!-- 聊天应用页面 -->
         <div id="appScreen" class="app-screen hidden">
             <!-- 顶部栏 -->
             <div class="header">
@@ -278,15 +457,77 @@
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
 
-            <!-- 消息容器 -->
-            <div class="messages-container" id="messagesContainer">
-                <div class="status">No messages yet. Start chatting!</div>
+            <!-- 导航标签 -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('messages')">💬 Messages</button>
+                <button class="nav-tab" onclick="switchTab('contacts')">👥 Contacts</button>
+                <button class="nav-tab" onclick="switchTab('discover')">✨ Discover</button>
+                <button class="nav-tab" onclick="switchTab('profile')">👤 Profile</button>
             </div>
 
-            <!-- 输入框 -->
-            <div class="input-container">
-                <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
-                <button class="send-btn" onclick="sendMessage()">Send</button>
+            <!-- 内容区域 -->
+            <div class="content-area">
+                <!-- Messages Tab -->
+                <div id="messagesTab" class="tab-content active">
+                    <div class="messages-list" id="messagesList">
+                        <div class="status">Loading conversations...</div>
+                    </div>
+                    
+                    <div class="chat-area">
+                        <div class="chat-header" id="chatHeader">Select a conversation</div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="status">Select a contact to start chatting</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
+                            <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contacts Tab -->
+                <div id="contactsTab" class="tab-content">
+                    <div class="contacts-grid" id="contactsGrid">
+                        <div class="status">Loading contacts...</div>
+                    </div>
+                </div>
+
+                <!-- Discover Tab -->
+                <div id="discoverTab" class="tab-content">
+                    <div class="discover-content">
+                        <div class="discover-title">🌟 Discover</div>
+                        <div class="discover-text">
+                            <p>Welcome to Synergytor!</p>
+                            <p style="margin-top: 15px;">Connect with alice, bob, and chen to start chatting.</p>
+                            <p style="margin-top: 15px; font-size: 12px; color: #999;">This is a real-time chat application built with Node.js, Express, and Vercel.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Tab -->
+                <div id="profileTab" class="tab-content">
+                    <div class="profile-content">
+                        <div class="profile-section">
+                            <div class="profile-label">Username</div>
+                            <div class="profile-value" id="profileUsername">alice</div>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <div class="profile-label">Status</div>
+                            <div class="profile-value">🟢 Online</div>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <div class="profile-label">About</div>
+                            <div class="profile-value">Welcome to Synergytor Chat App</div>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <div class="profile-label">App Version</div>
+                            <div class="profile-value">1.0.0</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -294,10 +535,12 @@
     <script>
         // ========== 配置 ==========
         const SERVER_URL = 'https://utilizable-maci-trunkless.ngrok-free.dev';
+        const CONTACTS = ['alice', 'bob', 'chen'];
         
         // ========== 全局变量 ==========
         let currentUser = null;
         let allMessages = [];
+        let selectedContact = null;
 
         // ========== 登录 ==========
         function login() {
@@ -309,7 +552,6 @@
                 return;
             }
 
-            // 简单验证（实际应用应该验证密码）
             if (password !== '123456') {
                 alert('Invalid password');
                 return;
@@ -319,61 +561,32 @@
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
             document.getElementById('currentUserDisplay').textContent = username;
+            document.getElementById('profileUsername').textContent = username;
 
-            // 加载消息
             loadMessages();
-
-            // 每 2 秒刷新一次消息
+            loadContacts();
             setInterval(loadMessages, 2000);
         }
 
         // ========== 登出 ==========
         function logout() {
             currentUser = null;
+            selectedContact = null;
             document.getElementById('appScreen').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
         }
 
-        // ========== 发送消息 ==========
-        async function sendMessage() {
-            const messageText = document.getElementById('messageInput').value.trim();
-            
-            if (!messageText) {
-                return;
-            }
+        // ========== 切换标签 ==========
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
 
-            try {
-                // 发送到服务器（包含 ngrok header）
-                const response = await fetch(`${SERVER_URL}/api/messages`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'ngrok-skip-browser-warning': 'true',
-                    },
-                    body: JSON.stringify({
-                        from: currentUser,
-                        to: 'everyone',
-                        message: messageText
-                    })
-                });
-
-                if (response.ok) {
-                    console.log('✅ Message sent to server');
-                    document.getElementById('messageInput').value = '';
-                    
-                    // 立即加载消息
-                    await loadMessages();
-                } else {
-                    console.error('❌ Server error:', response.status);
-                    alert('Failed to send message');
-                }
-
-            } catch (error) {
-                console.error('❌ Error sending message:', error);
-                alert('Error: ' + error.message);
-            }
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
         }
 
         // ========== 加载消息 ==========
@@ -384,65 +597,158 @@
                         'ngrok-skip-browser-warning': 'true',
                     }
                 });
-                const messages = await response.json();
-                
-                allMessages = messages;
-                displayMessages();
-                console.log('📨 Loaded messages:', messages);
-
+                allMessages = await response.json();
+                updateMessagesList();
+                if (selectedContact) {
+                    updateChatMessages();
+                }
             } catch (error) {
                 console.error('❌ Error loading messages:', error);
             }
         }
 
-        // ========== 显示消息 ==========
-        function displayMessages() {
-            const container = document.getElementById('messagesContainer');
+        // ========== 加载联系人 ==========
+        function loadContacts() {
+            const grid = document.getElementById('contactsGrid');
+            const otherContacts = CONTACTS.filter(c => c !== currentUser);
             
-            if (allMessages.length === 0) {
-                container.innerHTML = '<div class="status">No messages yet. Start chatting!</div>';
-                return;
-            }
-
             let html = '';
-            
-            allMessages.forEach(msg => {
-                const isSent = msg.from === currentUser;
-                const time = new Date(msg.timestamp).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-
+            otherContacts.forEach(contact => {
                 html += `
-                    <div class="message ${isSent ? 'sent' : 'received'}">
-                        <div>
-                            <div class="message-bubble">${escapeHtml(msg.message)}</div>
-                            <div class="message-time">${msg.from} · ${time}</div>
-                        </div>
+                    <div class="contact-card" onclick="selectContact('${contact}')">
+                        <div class="contact-avatar">👤</div>
+                        <div class="contact-name">${contact.charAt(0).toUpperCase() + contact.slice(1)}</div>
+                        <div class="contact-status">Online</div>
                     </div>
                 `;
             });
-
-            container.innerHTML = html;
             
-            // 自动滚动到最下面
-            container.scrollTop = container.scrollHeight;
+            grid.innerHTML = html;
         }
 
-        // ========== 辅助函数 ==========
+        // ========== 选择联系人 ==========
+        function selectContact(contact) {
+            selectedContact = contact;
+            document.querySelectorAll('.message-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.contact === contact) {
+                    item.classList.add('active');
+                }
+            });
+            updateChatMessages();
+        }
+
+        // ========== 更新消息列表 ==========
+        function updateMessagesList() {
+            const listDiv = document.getElementById('messagesList');
+            const otherContacts = CONTACTS.filter(c => c !== currentUser);
+            
+            let html = '';
+            otherContacts.forEach(contact => {
+                const relevantMessages = allMessages.filter(m => 
+                    (m.from === currentUser && m.to === contact) || 
+                    (m.from === contact && m.to === currentUser)
+                );
+                
+                const lastMessage = relevantMessages.length > 0 
+                    ? relevantMessages[relevantMessages.length - 1].message 
+                    : 'No messages yet';
+                
+                const isActive = selectedContact === contact ? 'active' : '';
+                
+                html += `
+                    <div class="message-item ${isActive}" data-contact="${contact}" onclick="selectContact('${contact}')">
+                        <div class="message-item-name">${contact.charAt(0).toUpperCase() + contact.slice(1)}</div>
+                        <div class="message-item-text">${lastMessage}</div>
+                    </div>
+                `;
+            });
+            
+            listDiv.innerHTML = html;
+        }
+
+        // ========== 更新聊天消息 ==========
+        function updateChatMessages() {
+            if (!selectedContact) return;
+            
+            const chatDiv = document.getElementById('chatMessages');
+            const header = document.getElementById('chatHeader');
+            
+            header.textContent = 'Chat with ' + selectedContact.charAt(0).toUpperCase() + selectedContact.slice(1);
+            
+            const relevantMessages = allMessages.filter(m => 
+                (m.from === currentUser && m.to === selectedContact) || 
+                (m.from === selectedContact && m.to === currentUser)
+            );
+            
+            if (relevantMessages.length === 0) {
+                chatDiv.innerHTML = '<div class="status">No messages yet. Start the conversation!</div>';
+                return;
+            }
+            
+            let html = '';
+            relevantMessages.forEach(msg => {
+                const isSent = msg.from === currentUser;
+                html += `
+                    <div class="chat-message ${isSent ? 'sent' : 'received'}">
+                        <div class="message-bubble">${escapeHtml(msg.message)}</div>
+                    </div>
+                `;
+            });
+            
+            chatDiv.innerHTML = html;
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        // ========== 发送聊天消息 ==========
+        async function sendChatMessage() {
+            if (!selectedContact) {
+                alert('Please select a contact first');
+                return;
+            }
+            
+            const input = document.getElementById('chatInput');
+            const messageText = input.value.trim();
+            
+            if (!messageText) return;
+            
+            try {
+                await fetch(`${SERVER_URL}/api/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true',
+                    },
+                    body: JSON.stringify({
+                        from: currentUser,
+                        to: selectedContact,
+                        message: messageText
+                    })
+                });
+                
+                input.value = '';
+                await loadMessages();
+                
+            } catch (error) {
+                console.error('❌ Error sending message:', error);
+            }
+        }
+
+        // ========== 键盘事件 ==========
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        // ========== HTML 转义 ==========
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
-        // ========== 页面加载 ==========
+        // ========== 初始化 ==========
         window.addEventListener('load', () => {
             console.log('✅ App loaded');
             console.log('📡 Server URL:', SERVER_URL);
