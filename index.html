@@ -762,7 +762,7 @@
 
     <script>
         const SERVER_URL = 'https://utilizable-maci-trunkless.ngrok-free.dev';
-        const CONTACTS = ['alice', 'bob', 'chen'];
+        let CONTACTS = [];  // ✅ 动态加载，不再硬编码
         
         let currentUser = null;
         let isCurrentUserAdmin = false;
@@ -791,15 +791,18 @@
             document.getElementById('appScreen').classList.remove('hidden');
             document.getElementById('sidebarUser').textContent = username;
 
-            checkAdminStatus();
-            loadProfile();
-            loadMessages();
-            loadContacts();
-            
-            const otherContacts = CONTACTS.filter(c => c !== currentUser);
-            if (otherContacts.length > 0) {
-                setTimeout(() => selectContact(otherContacts[0]), 500);
-            }
+            // ✅ 先加载所有用户
+            loadAllUsers().then(() => {
+                checkAdminStatus();
+                loadProfile();
+                loadMessages();
+                loadContacts();
+                
+                const otherContacts = Object.keys(allProfiles).filter(c => c !== currentUser);
+                if (otherContacts.length > 0) {
+                    setTimeout(() => selectContact(otherContacts[0]), 500);
+                }
+            });
         }
 
         async function checkAdminStatus() {
@@ -826,9 +829,15 @@
                     headers: { 'ngrok-skip-browser-warning': 'true' }
                 });
                 allProfiles = await response.json();
+                
+                // ✅ 更新 CONTACTS 为所有用户
+                CONTACTS = Object.keys(allProfiles);
+                
                 updateUsersList();
+                return true;
             } catch (error) {
                 console.error('❌ Error loading users:', error);
+                return false;
             }
         }
 
@@ -970,7 +979,12 @@
                 
                 if (response.ok) {
                     closeAddUserModal();
+                    
+                    // ✅ 重新加载所有用户
                     await loadAllUsers();
+                    loadContacts();  // ✅ 更新联系人列表
+                    loadMessages();  // ✅ 更新消息列表
+                    
                     alert(`✅ User "${username}" added successfully!`);
                 } else {
                     const error = await response.json();
@@ -999,7 +1013,11 @@
                 });
                 
                 if (response.ok) {
+                    // ✅ 重新加载所有用户
                     await loadAllUsers();
+                    loadContacts();  // ✅ 更新联系人列表
+                    loadMessages();  // ✅ 更新消息列表
+                    
                     alert(`✅ User "${username}" deleted!`);
                 } else {
                     const error = await response.json();
@@ -1038,7 +1056,9 @@
 
         function loadContacts() {
             const list = document.getElementById('contactsList');
-            const otherContacts = CONTACTS.filter(c => c !== currentUser);
+            
+            // ✅ 从 allProfiles 获取所有用户（动态）
+            const otherContacts = Object.keys(allProfiles).filter(c => c !== currentUser);
             
             let html = '';
             otherContacts.forEach(contact => {
@@ -1053,7 +1073,7 @@
                 `;
             });
             
-            list.innerHTML = html;
+            list.innerHTML = html || '<div class="empty-state">No contacts available</div>';
         }
 
         function selectContact(contact) {
@@ -1069,7 +1089,9 @@
 
         function updateMessagesList() {
             const listDiv = document.getElementById('messagesList');
-            const otherContacts = CONTACTS.filter(c => c !== currentUser);
+            
+            // ✅ 从 allProfiles 获取所有用户（动态）
+            const otherContacts = Object.keys(allProfiles).filter(c => c !== currentUser);
             
             let html = '';
             otherContacts.forEach(contact => {
