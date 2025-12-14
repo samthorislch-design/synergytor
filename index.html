@@ -802,6 +802,9 @@
                 if (otherContacts.length > 0) {
                     setTimeout(() => selectContact(otherContacts[0]), 500);
                 }
+                
+                // ✅ 添加自动刷新（每 2 秒）
+                setInterval(loadMessages, 2000);
             });
         }
 
