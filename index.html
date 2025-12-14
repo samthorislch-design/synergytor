@@ -90,14 +90,12 @@
             opacity: 0.9;
         }
 
-        /* 应用容器 */
         .app-container {
             display: flex;
             height: 100vh;
             background: white;
         }
 
-        /* 左侧栏 */
         .sidebar {
             width: 300px;
             background: white;
@@ -147,7 +145,6 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
-        /* 底部导航 */
         .sidebar-nav {
             display: flex;
             background: #f5f5f5;
@@ -177,7 +174,6 @@
             color: #003d99;
         }
 
-        /* 消息列表 */
         .messages-container {
             flex: 1;
             overflow-y: auto;
@@ -242,7 +238,6 @@
             text-overflow: ellipsis;
         }
 
-        /* 联系人列表 */
         .contacts-list {
             flex: 1;
             overflow-y: auto;
@@ -283,7 +278,6 @@
             margin-top: 2px;
         }
 
-        /* Tab 内容 */
         .tab-content {
             display: none;
             flex: 1;
@@ -296,14 +290,12 @@
             flex-direction: column;
         }
 
-        /* 发现页面 */
         .discover-text {
             color: #666;
             font-size: 14px;
             line-height: 1.8;
         }
 
-        /* 资料页面 */
         .profile-info {
             background: #f5f5f5;
             border-radius: 8px;
@@ -341,7 +333,6 @@
             opacity: 0.9;
         }
 
-        /* 模态框 */
         .modal {
             display: none;
             position: fixed;
@@ -420,7 +411,6 @@
             opacity: 0.9;
         }
 
-        /* 右侧聊天区 */
         .chat-container {
             flex: 1;
             display: flex;
@@ -448,7 +438,6 @@
             color: #999;
         }
 
-        /* 聊天消息 */
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -462,6 +451,7 @@
             margin-bottom: 12px;
             display: flex;
             animation: slideIn 0.3s ease;
+            gap: 8px;
         }
 
         @keyframes slideIn {
@@ -483,15 +473,24 @@
             justify-content: flex-start;
         }
 
+        .chat-message > div {
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
         .message-bubble {
-            max-width: 60%;
+            display: block;
             padding: 10px 14px;
             border-radius: 18px;
             font-size: 13px;
             line-height: 1.5;
+            word-break: break-word;
             word-wrap: break-word;
-            white-space: pre-wrap;
             overflow-wrap: break-word;
+            white-space: normal;
+            hyphens: none;
         }
 
         .chat-message.sent .message-bubble {
@@ -511,9 +510,9 @@
             font-size: 11px;
             color: #ccc;
             margin-top: 4px;
+            align-self: flex-end;
         }
 
-        /* 输入框 */
         .chat-input-area {
             padding: 12px;
             background: white;
@@ -553,7 +552,6 @@
             opacity: 0.9;
         }
 
-        /* 空状态 */
         .empty-state {
             display: flex;
             justify-content: center;
@@ -620,7 +618,6 @@
     </style>
 </head>
 <body>
-    <!-- 登录屏幕 -->
     <div id="loginScreen" class="login-screen">
         <div class="login-box">
             <h1>🚀 Synergytor</h1>
@@ -644,11 +641,8 @@
         </div>
     </div>
 
-    <!-- 应用 -->
     <div id="appScreen" class="app-container hidden">
-        <!-- 左侧栏 -->
         <div class="sidebar">
-            <!-- 顶部 -->
             <div class="sidebar-header">
                 <div>
                     <div class="sidebar-title">💬 Synergytor</div>
@@ -660,7 +654,6 @@
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
 
-            <!-- Messages Tab（会话列表） -->
             <div id="messagesTab" class="tab-content active" style="display: flex; flex-direction: column; padding: 0; flex: 1;">
                 <div class="search-box">
                     <input type="text" placeholder="Search...">
@@ -670,12 +663,10 @@
                 </div>
             </div>
 
-            <!-- Contacts Tab（联系人列表） -->
             <div id="contactsTab" class="tab-content" style="display: none; padding: 0;">
                 <div class="contacts-list" id="contactsList"></div>
             </div>
 
-            <!-- Discover Tab -->
             <div id="discoverTab" class="tab-content" style="display: none;">
                 <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
                     <div class="discover-text">
@@ -689,7 +680,6 @@
                 </div>
             </div>
 
-            <!-- Profile Tab -->
             <div id="profileTab" class="tab-content" style="display: none;">
                 <div class="profile-info">
                     <div class="profile-label">Name</div>
@@ -709,7 +699,6 @@
                 </div>
                 <button class="profile-btn" onclick="openEditModal()">Edit Profile</button>
 
-                <!-- 管理员部分 -->
                 <div id="adminSection" class="admin-section" style="display:none;">
                     <div class="admin-section-title">👑 Admin Management</div>
                     <button class="profile-btn" onclick="openAddUserModal()" style="margin-top: 0;">➕ Add New User</button>
@@ -719,7 +708,6 @@
                 </div>
             </div>
 
-            <!-- 导航 -->
             <div class="sidebar-nav">
                 <button class="nav-item active" onclick="switchTab('messages')">💬</button>
                 <button class="nav-item" onclick="switchTab('contacts')">👥</button>
@@ -728,7 +716,6 @@
             </div>
         </div>
 
-        <!-- 右侧聊天区 -->
         <div class="chat-container">
             <div class="chat-header">
                 <div>
@@ -748,7 +735,6 @@
         </div>
     </div>
 
-    <!-- 编辑资料模态框 -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">Edit Profile</div>
@@ -763,7 +749,6 @@
         </div>
     </div>
 
-    <!-- 添加新用户模态框 -->
     <div id="addUserModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">➕ Add New User</div>
@@ -780,21 +765,17 @@
     </div>
 
     <script>
-        // ========== 配置 ==========
         const SERVER_URL = 'https://utilizable-maci-trunkless.ngrok-free.dev';
         const CONTACTS = ['alice', 'bob', 'chen'];
         
-        // ========== 全局变量 ==========
         let currentUser = null;
         let isCurrentUserAdmin = false;
         let allMessages = [];
         let selectedContact = null;
         let currentProfile = null;
         let allProfiles = {};
-        let lastMessageCount = 0;
-        let lastMessagesList = {};
+        let refreshInterval = null;
 
-        // ========== 登录 ==========
         function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -823,11 +804,8 @@
             if (otherContacts.length > 0) {
                 setTimeout(() => selectContact(otherContacts[0]), 500);
             }
-            
-            setInterval(loadMessages, 2000);
         }
 
-        // ========== 检查管理员状态 ==========
         async function checkAdminStatus() {
             try {
                 const response = await fetch(`${SERVER_URL}/api/check-admin/${currentUser}`, {
@@ -846,7 +824,6 @@
             }
         }
 
-        // ========== 加载所有用户 ==========
         async function loadAllUsers() {
             try {
                 const response = await fetch(`${SERVER_URL}/api/profiles`, {
@@ -859,7 +836,6 @@
             }
         }
 
-        // ========== 更新用户列表 ==========
         function updateUsersList() {
             const list = document.getElementById('usersList');
             let html = '';
@@ -876,16 +852,15 @@
             list.innerHTML = html || '<div style="padding:10px; text-align:center; color:#999;">No users</div>';
         }
 
-        // ========== 登出 ==========
         function logout() {
             currentUser = null;
             isCurrentUserAdmin = false;
             selectedContact = null;
+            if (refreshInterval) clearInterval(refreshInterval);
             document.getElementById('appScreen').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
         }
 
-        // ========== 加载用户资料 ==========
         async function loadProfile() {
             try {
                 const response = await fetch(`${SERVER_URL}/api/profile/${currentUser}`, {
@@ -901,7 +876,6 @@
             }
         }
 
-        // ========== 更新资料显示 ==========
         function updateProfileDisplay() {
             if (!currentProfile) return;
             
@@ -913,17 +887,14 @@
             document.getElementById('editAbout').value = currentProfile.about || '';
         }
 
-        // ========== 打开编辑资料模态框 ==========
         function openEditModal() {
             document.getElementById('editModal').classList.add('active');
         }
 
-        // ========== 关闭编辑资料模态框 ==========
         function closeEditModal() {
             document.getElementById('editModal').classList.remove('active');
         }
 
-        // ========== 保存资料 ==========
         async function saveProfile() {
             const name = document.getElementById('editName').value.trim();
             const about = document.getElementById('editAbout').value.trim();
@@ -959,7 +930,6 @@
             }
         }
 
-        // ========== 打开添加用户模态框 ==========
         function openAddUserModal() {
             if (!isCurrentUserAdmin) {
                 alert('Only administrators can add users');
@@ -968,12 +938,10 @@
             document.getElementById('addUserModal').classList.add('active');
         }
 
-        // ========== 关闭添加用户模态框 ==========
         function closeAddUserModal() {
             document.getElementById('addUserModal').classList.remove('active');
         }
 
-        // ========== 添加新用户 ==========
         async function addNewUser() {
             if (!isCurrentUserAdmin) {
                 alert('Only administrators can add users');
@@ -1018,7 +986,6 @@
             }
         }
 
-        // ========== 删除用户 ==========
         async function deleteUser(username) {
             if (!isCurrentUserAdmin) {
                 alert('Only administrators can delete users');
@@ -1048,7 +1015,6 @@
             }
         }
 
-        // ========== 切换 Tab ==========
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -1058,7 +1024,6 @@
             event.target.classList.add('active');
         }
 
-        // ========== 加载消息（只在有新消息时更新） ==========
         async function loadMessages() {
             try {
                 const response = await fetch(`${SERVER_URL}/api/messages`, {
@@ -1066,13 +1031,7 @@
                 });
                 allMessages = await response.json();
                 
-                // 只有在消息数量改变时才更新列表
-                if (allMessages.length !== lastMessageCount) {
-                    lastMessageCount = allMessages.length;
-                    updateMessagesList();
-                }
-                
-                // 只有在选中联系人的消息改变时才更新聊天框
+                updateMessagesList();
                 if (selectedContact) {
                     updateChatMessages();
                 }
@@ -1081,7 +1040,6 @@
             }
         }
 
-        // ========== 加载联系人 ==========
         function loadContacts() {
             const list = document.getElementById('contactsList');
             const otherContacts = CONTACTS.filter(c => c !== currentUser);
@@ -1102,7 +1060,6 @@
             list.innerHTML = html;
         }
 
-        // ========== 选择联系人 ==========
         function selectContact(contact) {
             selectedContact = contact;
             document.querySelectorAll('.message-item').forEach(item => {
@@ -1114,7 +1071,6 @@
             updateChatMessages();
         }
 
-        // ========== 更新消息列表 ==========
         function updateMessagesList() {
             const listDiv = document.getElementById('messagesList');
             const otherContacts = CONTACTS.filter(c => c !== currentUser);
@@ -1142,7 +1098,6 @@
             listDiv.innerHTML = html || '<div class="empty-state">No messages</div>';
         }
 
-        // ========== 更新聊天消息（智能更新，不闪烁） ==========
         function updateChatMessages() {
             if (!selectedContact) return;
             
@@ -1153,14 +1108,6 @@
                 (m.from === currentUser && m.to === selectedContact) || 
                 (m.from === selectedContact && m.to === currentUser)
             );
-            
-            // 如果消息完全相同，不更新（避免闪烁）
-            const msgKey = selectedContact;
-            if (lastMessagesList[msgKey] === msgs.length) {
-                return;
-            }
-            
-            lastMessagesList[msgKey] = msgs.length;
             
             if (msgs.length === 0) {
                 chatDiv.innerHTML = '<div class="empty-state">No messages yet<br>Start the conversation!</div>';
@@ -1186,7 +1133,6 @@
             chatDiv.scrollTop = chatDiv.scrollHeight;
         }
 
-        // ========== 发送消息 ==========
         async function sendChatMessage() {
             if (!selectedContact) {
                 alert('Select a contact first');
@@ -1220,27 +1166,23 @@
             }
         }
 
-        // ========== 键盘事件 ==========
         function handleChatKeyPress(event) {
             if (event.key === 'Enter') {
                 sendChatMessage();
             }
         }
 
-        // ========== HTML 转义 ==========
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        // ========== 初始化 ==========
         window.addEventListener('load', () => {
             console.log('✅ App loaded');
             console.log('📡 Server:', SERVER_URL);
         });
 
-        // 关闭模态框
         document.addEventListener('click', (e) => {
             const editModal = document.getElementById('editModal');
             const addUserModal = document.getElementById('addUserModal');
