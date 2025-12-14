@@ -345,15 +345,16 @@
             }
 
             try {
-                // 发送到服务器
+                // 发送到服务器（包含 ngrok header）
                 const response = await fetch(`${SERVER_URL}/api/messages`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true',
                     },
                     body: JSON.stringify({
                         from: currentUser,
-                        to: 'everyone', // 发给所有人
+                        to: 'everyone',
                         message: messageText
                     })
                 });
@@ -378,7 +379,11 @@
         // ========== 加载消息 ==========
         async function loadMessages() {
             try {
-                const response = await fetch(`${SERVER_URL}/api/messages`);
+                const response = await fetch(`${SERVER_URL}/api/messages`, {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true',
+                    }
+                });
                 const messages = await response.json();
                 
                 allMessages = messages;
