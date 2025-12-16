@@ -719,6 +719,200 @@
             cursor: not-allowed;
             pointer-events: none;
         }
+
+        /* 消息状态样式 */
+        .message-status {
+            font-size: 10px;
+            color: #999;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .message-status.sending {
+            color: #ffa500;
+        }
+
+        .message-status.delivered {
+            color: #51cf66;
+        }
+
+        .message-status.failed {
+            color: #ff6b6b;
+        }
+
+        .status-icon {
+            font-size: 10px;
+        }
+
+        /* 移动端响应式设计 */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 2000;
+            background: linear-gradient(135deg, #003d99 0%, #0052cc 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .mobile-menu-btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                height: 100vh;
+                z-index: 1500;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .sidebar.mobile-open {
+                left: 0;
+            }
+
+            .chat-container {
+                width: 100%;
+                padding-top: 50px;
+            }
+
+            .connection-status {
+                bottom: 10px;
+                right: 10px;
+                font-size: 10px;
+                padding: 6px 10px;
+            }
+
+            .toast {
+                top: 60px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+
+            .login-box {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 280px;
+            }
+
+            .chat-header-title {
+                font-size: 14px;
+            }
+
+            .message-bubble {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+
+        /* 移动端覆盖层 */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1400;
+        }
+
+        .mobile-overlay.active {
+            display: block;
+        }
+
+        @media (min-width: 769px) {
+            .mobile-overlay {
+                display: none !important;
+            }
+        }
+
+        /* 通知权限提示 */
+        .notification-prompt {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            display: none;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .notification-prompt.active {
+            display: block;
+            animation: slideInDown 0.3s ease;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateX(-50%) translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .notification-prompt-text {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .notification-prompt-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notification-prompt-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .notification-prompt-btn.primary {
+            background: linear-gradient(135deg, #003d99 0%, #0052cc 100%);
+            color: white;
+        }
+
+        .notification-prompt-btn.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -737,11 +931,17 @@
                 <input type="password" id="password" placeholder="Enter password">
             </div>
             
-            <button class="login-btn" onclick="login()">Sign In</button>
+            <button class="login-btn" id="loginBtn">Sign In</button>
         </div>
     </div>
 
     <div id="appScreen" class="app-container hidden">
+        <!-- 移动端菜单按钮 -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn">☰</button>
+
+        <!-- 移动端覆盖层 -->
+        <div id="mobileOverlay" class="mobile-overlay"></div>
+
         <div class="sidebar">
             <div class="sidebar-header">
                 <div>
@@ -751,7 +951,7 @@
                         <span id="adminBadge" class="admin-badge" style="display:none;">👑 ADMIN</span>
                     </div>
                 </div>
-                <button class="logout-btn" onclick="logout()">Logout</button>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
 
             <div id="messagesTab" class="tab-content active" style="display: flex; flex-direction: column; padding: 0; flex: 1;">
@@ -797,11 +997,11 @@
                     <div class="profile-label">Status</div>
                     <div class="profile-value">🟢 Online</div>
                 </div>
-                <button class="profile-btn" onclick="openEditModal()">Edit Profile</button>
+                <button class="profile-btn" id="editProfileBtn">Edit Profile</button>
 
                 <div id="adminSection" class="admin-section" style="display:none;">
                     <div class="admin-section-title">👑 Admin Management</div>
-                    <button class="profile-btn" onclick="openAddUserModal()" style="margin-top: 0;">➕ Add New User</button>
+                    <button class="profile-btn" id="addUserBtn" style="margin-top: 0;">➕ Add New User</button>
                     
                     <div class="admin-section-title" style="margin-top: 15px;">All Users</div>
                     <div class="user-list" id="usersList"></div>
@@ -809,10 +1009,10 @@
             </div>
 
             <div class="sidebar-nav">
-                <button class="nav-item active" onclick="switchTab('messages')">💬</button>
-                <button class="nav-item" onclick="switchTab('contacts')">👥</button>
-                <button class="nav-item" onclick="switchTab('discover')">✨</button>
-                <button class="nav-item" onclick="switchTab('profile')">👤</button>
+                <button class="nav-item active" data-tab="messages">💬</button>
+                <button class="nav-item" data-tab="contacts">👥</button>
+                <button class="nav-item" data-tab="discover">✨</button>
+                <button class="nav-item" data-tab="profile">👤</button>
             </div>
         </div>
 
@@ -829,8 +1029,8 @@
             </div>
 
             <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
-                <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+                <input type="text" id="chatInput" placeholder="Type a message...">
+                <button class="chat-send-btn" id="sendBtn">Send</button>
             </div>
         </div>
     </div>
@@ -843,8 +1043,8 @@
             <input type="text" id="editAbout" class="modal-input" placeholder="About">
             
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-save" onclick="saveProfile()">Save</button>
-                <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">Cancel</button>
+                <button class="modal-btn modal-btn-save" id="saveProfileBtn">Save</button>
+                <button class="modal-btn modal-btn-cancel" id="cancelEditBtn">Cancel</button>
             </div>
         </div>
     </div>
@@ -858,8 +1058,8 @@
             <input type="text" id="newAbout" class="modal-input" placeholder="About">
             
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-save" onclick="addNewUser()">Add User</button>
-                <button class="modal-btn modal-btn-cancel" onclick="closeAddUserModal()">Cancel</button>
+                <button class="modal-btn modal-btn-save" id="confirmAddUserBtn">Add User</button>
+                <button class="modal-btn modal-btn-cancel" id="cancelAddUserBtn">Cancel</button>
             </div>
         </div>
     </div>
@@ -868,6 +1068,17 @@
     <div id="connectionStatus" class="connection-status connected" style="display:none;">
         <div class="status-dot connected"></div>
         <span id="statusText">已连接</span>
+    </div>
+
+    <!-- 通知权限提示 -->
+    <div id="notificationPrompt" class="notification-prompt">
+        <div class="notification-prompt-text">
+            🔔 是否允许接收新消息通知？
+        </div>
+        <div class="notification-prompt-buttons">
+            <button id="allowNotificationBtn" class="notification-prompt-btn primary">允许</button>
+            <button id="denyNotificationBtn" class="notification-prompt-btn secondary">暂不</button>
+        </div>
     </div>
 
     <script>
@@ -1008,6 +1219,15 @@
                     updateMessagesList();
                     if (selectedContact === data.message.from || selectedContact === data.message.to) {
                         updateChatMessages();
+                    }
+
+                    // 显示通知（仅当消息来自其他人且不是发送给自己的）
+                    if (data.message.to === currentUser && data.message.from !== currentUser) {
+                        const senderName = data.message.from.charAt(0).toUpperCase() + data.message.from.slice(1);
+                        showNotification(
+                            `来自 ${senderName} 的新消息`,
+                            data.message.message
+                        );
                     }
                     break;
 
@@ -1158,7 +1378,7 @@
                 html += `
                     <div class="user-item">
                         <span class="user-item-name">${username}</span>
-                        <button class="user-item-delete" onclick="deleteUser('${username}')">Delete</button>
+                        <button class="user-item-delete" data-username="${username}">Delete</button>
                     </div>
                 `;
             });
@@ -1379,13 +1599,20 @@
             }
         }
 
-        function switchTab(tabName) {
+        function switchTab(tabName, targetElement) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            
+
             const tabEl = document.getElementById(tabName + 'Tab');
             tabEl.style.display = 'flex';
-            event.target.classList.add('active');
+            if (targetElement) {
+                targetElement.classList.add('active');
+            }
+
+            // 移动端：切换标签后自动关闭侧边栏
+            if (window.innerWidth <= 768) {
+                closeMobileSidebar();
+            }
         }
 
         async function loadMessages() {
@@ -1423,7 +1650,7 @@
             let html = '';
             otherContacts.forEach(contact => {
                 html += `
-                    <div class="contact-item" onclick="selectContact('${contact}')">
+                    <div class="contact-item" data-contact="${contact}">
                         <div class="contact-avatar">👤</div>
                         <div class="contact-info">
                             <div class="contact-name">${contact.charAt(0).toUpperCase() + contact.slice(1)}</div>
@@ -1464,7 +1691,7 @@
                 const isActive = selectedContact === contact ? 'active' : '';
                 
                 html += `
-                    <div class="message-item ${isActive}" data-contact="${contact}" onclick="selectContact('${contact}')">
+                    <div class="message-item ${isActive}" data-contact="${contact}">
                         <div class="message-item-info">
                             <div class="message-item-name">${contact.charAt(0).toUpperCase() + contact.slice(1)}</div>
                             <div class="message-item-text">${lastMsg.substring(0, 30)}</div>
@@ -1574,16 +1801,262 @@
             return div.innerHTML;
         }
 
+        // ========== 通知功能 ==========
+
+        let notificationPermission = false;
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                console.log('⚠️ 浏览器不支持通知');
+                return false;
+            }
+
+            if (Notification.permission === 'granted') {
+                notificationPermission = true;
+                return true;
+            }
+
+            if (Notification.permission !== 'denied') {
+                const permission = await Notification.requestPermission();
+                notificationPermission = permission === 'granted';
+                return notificationPermission;
+            }
+
+            return false;
+        }
+
+        function showNotification(title, body) {
+            if (!notificationPermission || Notification.permission !== 'granted') {
+                return;
+            }
+
+            // 检查页面是否在后台
+            if (!document.hidden) {
+                return; // 页面在前台，不显示通知
+            }
+
+            const notification = new Notification(title, {
+                body: body,
+                icon: '🚀',
+                tag: 'synergytor-message',
+                requireInteraction: false
+            });
+
+            notification.onclick = () => {
+                window.focus();
+                notification.close();
+            };
+
+            // 5秒后自动关闭
+            setTimeout(() => notification.close(), 5000);
+        }
+
+        function showNotificationPrompt() {
+            const prompt = document.getElementById('notificationPrompt');
+            if (Notification.permission === 'default') {
+                prompt.classList.add('active');
+            }
+        }
+
+        function hideNotificationPrompt() {
+            const prompt = document.getElementById('notificationPrompt');
+            prompt.classList.remove('active');
+        }
+
+        // ========== 移动端菜单功能 ==========
+
+        function toggleMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+        }
+
+        // ========== 消息状态跟踪 ==========
+
+        const pendingMessages = new Map(); // 跟踪待发送的消息
+
+        function generateTempMessageId() {
+            return `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        }
+
+        // ========== 事件监听器初始化 ==========
+
+        function initEventListeners() {
+            // 登录按钮
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', login);
+            }
+
+            // 登录表单 - Enter键登录
+            const passwordInput = document.getElementById('password');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        login();
+                    }
+                });
+            }
+
+            // 退出登录按钮
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', logout);
+            }
+
+            // 导航标签按钮 - 使用事件委托
+            const sidebarNav = document.querySelector('.sidebar-nav');
+            if (sidebarNav) {
+                sidebarNav.addEventListener('click', (e) => {
+                    const navItem = e.target.closest('.nav-item');
+                    if (navItem) {
+                        const tabName = navItem.dataset.tab;
+                        switchTab(tabName, navItem);
+                    }
+                });
+            }
+
+            // 编辑个人资料按钮
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener('click', openEditModal);
+            }
+
+            // 保存个人资料按钮
+            const saveProfileBtn = document.getElementById('saveProfileBtn');
+            if (saveProfileBtn) {
+                saveProfileBtn.addEventListener('click', saveProfile);
+            }
+
+            // 取消编辑按钮
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', closeEditModal);
+            }
+
+            // 添加用户按钮
+            const addUserBtn = document.getElementById('addUserBtn');
+            if (addUserBtn) {
+                addUserBtn.addEventListener('click', openAddUserModal);
+            }
+
+            // 确认添加用户按钮
+            const confirmAddUserBtn = document.getElementById('confirmAddUserBtn');
+            if (confirmAddUserBtn) {
+                confirmAddUserBtn.addEventListener('click', addNewUser);
+            }
+
+            // 取消添加用户按钮
+            const cancelAddUserBtn = document.getElementById('cancelAddUserBtn');
+            if (cancelAddUserBtn) {
+                cancelAddUserBtn.addEventListener('click', closeAddUserModal);
+            }
+
+            // 聊天输入框 - Enter键发送
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendChatMessage();
+                    }
+                });
+            }
+
+            // 发送按钮
+            const sendBtn = document.getElementById('sendBtn');
+            if (sendBtn) {
+                sendBtn.addEventListener('click', sendChatMessage);
+            }
+
+            // 移动端菜单按钮
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleMobileSidebar);
+            }
+
+            // 移动端覆盖层
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', closeMobileSidebar);
+            }
+
+            // 通知权限按钮
+            const allowNotificationBtn = document.getElementById('allowNotificationBtn');
+            if (allowNotificationBtn) {
+                allowNotificationBtn.addEventListener('click', async () => {
+                    await requestNotificationPermission();
+                    hideNotificationPrompt();
+                    if (notificationPermission) {
+                        showToast('已开启消息通知', 'success');
+                    }
+                });
+            }
+
+            const denyNotificationBtn = document.getElementById('denyNotificationBtn');
+            if (denyNotificationBtn) {
+                denyNotificationBtn.addEventListener('click', () => {
+                    hideNotificationPrompt();
+                });
+            }
+
+            // 事件委托 - 删除用户按钮
+            document.addEventListener('click', (e) => {
+                const deleteBtn = e.target.closest('.user-item-delete');
+                if (deleteBtn) {
+                    const username = deleteBtn.dataset.username;
+                    deleteUser(username);
+                    return;
+                }
+
+                // 事件委托 - 选择联系人
+                const contactItem = e.target.closest('.contact-item');
+                if (contactItem) {
+                    const contact = contactItem.dataset.contact;
+                    selectContact(contact);
+                    return;
+                }
+
+                // 事件委托 - 选择消息
+                const messageItem = e.target.closest('.message-item');
+                if (messageItem) {
+                    const contact = messageItem.dataset.contact;
+                    selectContact(contact);
+                    return;
+                }
+
+                // 模态框背景点击关闭
+                const editModal = document.getElementById('editModal');
+                const addUserModal = document.getElementById('addUserModal');
+                if (e.target === editModal) closeEditModal();
+                if (e.target === addUserModal) closeAddUserModal();
+            });
+        }
+
+        // ========== 页面加载完成后初始化 ==========
+
         window.addEventListener('load', () => {
             console.log('✅ App loaded');
             console.log('📡 Server:', SERVER_URL);
-        });
 
-        document.addEventListener('click', (e) => {
-            const editModal = document.getElementById('editModal');
-            const addUserModal = document.getElementById('addUserModal');
-            if (e.target === editModal) closeEditModal();
-            if (e.target === addUserModal) closeAddUserModal();
+            // 初始化所有事件监听器
+            initEventListeners();
+
+            // 登录后显示通知权限提示
+            setTimeout(() => {
+                if (currentUser && Notification.permission === 'default') {
+                    showNotificationPrompt();
+                }
+            }, 3000);
         });
     </script>
 </body>
