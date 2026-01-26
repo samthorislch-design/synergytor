@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Synergytor - WeChat Style</title>
+    <script src="config.js"></script>
     <style>
         * {
             margin: 0;
@@ -615,6 +616,303 @@
         .user-item-delete:hover {
             opacity: 0.9;
         }
+
+        /* 加载状态和错误提示样式 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            max-width: 350px;
+            font-size: 14px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.error {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .toast.success {
+            background: #51cf66;
+            color: white;
+        }
+
+        .toast.info {
+            background: #339af0;
+            color: white;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .connection-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 1000;
+        }
+
+        .connection-status.connected {
+            color: #51cf66;
+        }
+
+        .connection-status.disconnected {
+            color: #ff6b6b;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: #51cf66;
+        }
+
+        .status-dot.disconnected {
+            background: #ff6b6b;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .btn-loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* 消息状态样式 */
+        .message-status {
+            font-size: 10px;
+            color: #999;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .message-status.sending {
+            color: #ffa500;
+        }
+
+        .message-status.delivered {
+            color: #51cf66;
+        }
+
+        .message-status.failed {
+            color: #ff6b6b;
+        }
+
+        .status-icon {
+            font-size: 10px;
+        }
+
+        /* 移动端响应式设计 */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 2000;
+            background: linear-gradient(135deg, #003d99 0%, #0052cc 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .mobile-menu-btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                height: 100vh;
+                z-index: 1500;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .sidebar.mobile-open {
+                left: 0;
+            }
+
+            .chat-container {
+                width: 100%;
+                padding-top: 50px;
+            }
+
+            .connection-status {
+                bottom: 10px;
+                right: 10px;
+                font-size: 10px;
+                padding: 6px 10px;
+            }
+
+            .toast {
+                top: 60px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+
+            .login-box {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 280px;
+            }
+
+            .chat-header-title {
+                font-size: 14px;
+            }
+
+            .message-bubble {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+
+        /* 移动端覆盖层 */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1400;
+        }
+
+        .mobile-overlay.active {
+            display: block;
+        }
+
+        @media (min-width: 769px) {
+            .mobile-overlay {
+                display: none !important;
+            }
+        }
+
+        /* 通知权限提示 */
+        .notification-prompt {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            display: none;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .notification-prompt.active {
+            display: block;
+            animation: slideInDown 0.3s ease;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateX(-50%) translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .notification-prompt-text {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .notification-prompt-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notification-prompt-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .notification-prompt-btn.primary {
+            background: linear-gradient(135deg, #003d99 0%, #0052cc 100%);
+            color: white;
+        }
+
+        .notification-prompt-btn.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -633,11 +931,17 @@
                 <input type="password" id="password" placeholder="Enter password">
             </div>
             
-            <button class="login-btn" onclick="login()">Sign In</button>
+            <button class="login-btn" id="loginBtn">Sign In</button>
         </div>
     </div>
 
     <div id="appScreen" class="app-container hidden">
+        <!-- 移动端菜单按钮 -->
+        <button id="mobileMenuBtn" class="mobile-menu-btn">☰</button>
+
+        <!-- 移动端覆盖层 -->
+        <div id="mobileOverlay" class="mobile-overlay"></div>
+
         <div class="sidebar">
             <div class="sidebar-header">
                 <div>
@@ -647,7 +951,7 @@
                         <span id="adminBadge" class="admin-badge" style="display:none;">👑 ADMIN</span>
                     </div>
                 </div>
-                <button class="logout-btn" onclick="logout()">Logout</button>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
 
             <div id="messagesTab" class="tab-content active" style="display: flex; flex-direction: column; padding: 0; flex: 1;">
@@ -693,11 +997,11 @@
                     <div class="profile-label">Status</div>
                     <div class="profile-value">🟢 Online</div>
                 </div>
-                <button class="profile-btn" onclick="openEditModal()">Edit Profile</button>
+                <button class="profile-btn" id="editProfileBtn">Edit Profile</button>
 
                 <div id="adminSection" class="admin-section" style="display:none;">
                     <div class="admin-section-title">👑 Admin Management</div>
-                    <button class="profile-btn" onclick="openAddUserModal()" style="margin-top: 0;">➕ Add New User</button>
+                    <button class="profile-btn" id="addUserBtn" style="margin-top: 0;">➕ Add New User</button>
                     
                     <div class="admin-section-title" style="margin-top: 15px;">All Users</div>
                     <div class="user-list" id="usersList"></div>
@@ -705,10 +1009,10 @@
             </div>
 
             <div class="sidebar-nav">
-                <button class="nav-item active" onclick="switchTab('messages')">💬</button>
-                <button class="nav-item" onclick="switchTab('contacts')">👥</button>
-                <button class="nav-item" onclick="switchTab('discover')">✨</button>
-                <button class="nav-item" onclick="switchTab('profile')">👤</button>
+                <button class="nav-item active" data-tab="messages">💬</button>
+                <button class="nav-item" data-tab="contacts">👥</button>
+                <button class="nav-item" data-tab="discover">✨</button>
+                <button class="nav-item" data-tab="profile">👤</button>
             </div>
         </div>
 
@@ -725,8 +1029,8 @@
             </div>
 
             <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
-                <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+                <input type="text" id="chatInput" placeholder="Type a message...">
+                <button class="chat-send-btn" id="sendBtn">Send</button>
             </div>
         </div>
     </div>
@@ -739,8 +1043,8 @@
             <input type="text" id="editAbout" class="modal-input" placeholder="About">
             
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-save" onclick="saveProfile()">Save</button>
-                <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">Cancel</button>
+                <button class="modal-btn modal-btn-save" id="saveProfileBtn">Save</button>
+                <button class="modal-btn modal-btn-cancel" id="cancelEditBtn">Cancel</button>
             </div>
         </div>
     </div>
@@ -754,16 +1058,37 @@
             <input type="text" id="newAbout" class="modal-input" placeholder="About">
             
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-save" onclick="addNewUser()">Add User</button>
-                <button class="modal-btn modal-btn-cancel" onclick="closeAddUserModal()">Cancel</button>
+                <button class="modal-btn modal-btn-save" id="confirmAddUserBtn">Add User</button>
+                <button class="modal-btn modal-btn-cancel" id="cancelAddUserBtn">Cancel</button>
             </div>
         </div>
     </div>
 
+    <!-- 连接状态指示器 -->
+    <div id="connectionStatus" class="connection-status connected" style="display:none;">
+        <div class="status-dot connected"></div>
+        <span id="statusText">已连接</span>
+    </div>
+
+    <!-- 通知权限提示 -->
+    <div id="notificationPrompt" class="notification-prompt">
+        <div class="notification-prompt-text">
+            🔔 是否允许接收新消息通知？
+        </div>
+        <div class="notification-prompt-buttons">
+            <button id="allowNotificationBtn" class="notification-prompt-btn primary">允许</button>
+            <button id="denyNotificationBtn" class="notification-prompt-btn secondary">暂不</button>
+        </div>
+    </div>
+
     <script>
-        const SERVER_URL = 'https://utilizable-maci-trunkless.ngrok-free.dev';
+        // ✅ 使用配置文件，不再硬编码
+        const SERVER_URL = APP_CONFIG.SERVER_URL;
+        const WS_URL = APP_CONFIG.WS_URL;
+        const POLLING_INTERVAL = APP_CONFIG.FEATURES.POLLING_INTERVAL;
+
         let CONTACTS = [];  // ✅ 动态加载，不再硬编码
-        
+
         let currentUser = null;
         let isCurrentUserAdmin = false;
         let allMessages = [];
@@ -772,40 +1097,229 @@
         let allProfiles = {};
         let refreshInterval = null;
 
-        function login() {
+        // WebSocket 相关变量
+        let ws = null;
+        let wsReconnectAttempts = 0;
+        let wsMaxReconnectAttempts = 5;
+        let isConnected = false;
+
+        // ========== 工具函数 ==========
+
+        // 显示提示消息
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, APP_CONFIG.UI.ERROR_TOAST_DURATION);
+        }
+
+        // 更新连接状态
+        function updateConnectionStatus(connected) {
+            isConnected = connected;
+            const statusDiv = document.getElementById('connectionStatus');
+            const statusText = document.getElementById('statusText');
+            const statusDot = statusDiv.querySelector('.status-dot');
+
+            statusDiv.style.display = 'flex';
+
+            if (connected) {
+                statusDiv.className = 'connection-status connected';
+                statusDot.className = 'status-dot connected';
+                statusText.textContent = APP_CONFIG.FEATURES.ENABLE_WEBSOCKET ? '实时连接' : '已连接';
+            } else {
+                statusDiv.className = 'connection-status disconnected';
+                statusDot.className = 'status-dot disconnected';
+                statusText.textContent = '连接断开';
+            }
+        }
+
+        // 设置按钮加载状态
+        function setButtonLoading(button, loading) {
+            if (loading) {
+                button.classList.add('btn-loading');
+                button.dataset.originalText = button.textContent;
+                button.innerHTML = '<span class="loading-spinner"></span> 加载中...';
+            } else {
+                button.classList.remove('btn-loading');
+                button.textContent = button.dataset.originalText || button.textContent;
+            }
+        }
+
+        // ========== WebSocket 功能 ==========
+
+        function initWebSocket() {
+            if (!APP_CONFIG.FEATURES.ENABLE_WEBSOCKET) {
+                console.log('ℹ️ WebSocket 未启用，使用轮询模式');
+                updateConnectionStatus(true);
+                return;
+            }
+
+            try {
+                ws = new WebSocket(WS_URL);
+
+                ws.onopen = () => {
+                    console.log('✅ WebSocket 连接成功');
+                    wsReconnectAttempts = 0;
+                    updateConnectionStatus(true);
+                    showToast('实时连接已建立', 'success');
+
+                    // 发送认证信息
+                    ws.send(JSON.stringify({
+                        type: 'auth',
+                        username: currentUser
+                    }));
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        handleWebSocketMessage(data);
+                    } catch (error) {
+                        console.error('❌ WebSocket 消息解析失败:', error);
+                    }
+                };
+
+                ws.onerror = (error) => {
+                    console.error('❌ WebSocket 错误:', error);
+                    updateConnectionStatus(false);
+                };
+
+                ws.onclose = () => {
+                    console.log('🔌 WebSocket 连接关闭');
+                    updateConnectionStatus(false);
+
+                    // 尝试重连
+                    if (wsReconnectAttempts < wsMaxReconnectAttempts) {
+                        wsReconnectAttempts++;
+                        const delay = Math.min(1000 * Math.pow(2, wsReconnectAttempts), 30000);
+                        console.log(`🔄 将在 ${delay/1000} 秒后重连 (尝试 ${wsReconnectAttempts}/${wsMaxReconnectAttempts})`);
+                        setTimeout(initWebSocket, delay);
+                    } else {
+                        showToast('实时连接失败，已切换到轮询模式', 'info');
+                        startPolling();
+                    }
+                };
+            } catch (error) {
+                console.error('❌ WebSocket 初始化失败:', error);
+                updateConnectionStatus(false);
+                startPolling();
+            }
+        }
+
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'new_message':
+                    // 新消息到达
+                    allMessages.push(data.message);
+                    updateMessagesList();
+                    if (selectedContact === data.message.from || selectedContact === data.message.to) {
+                        updateChatMessages();
+                    }
+
+                    // 显示通知（仅当消息来自其他人且不是发送给自己的）
+                    if (data.message.to === currentUser && data.message.from !== currentUser) {
+                        const senderName = data.message.from.charAt(0).toUpperCase() + data.message.from.slice(1);
+                        showNotification(
+                            `来自 ${senderName} 的新消息`,
+                            data.message.message
+                        );
+                    }
+                    break;
+
+                case 'user_online':
+                case 'user_offline':
+                    // 用户上线/下线
+                    loadContacts();
+                    break;
+
+                default:
+                    console.log('📨 未知消息类型:', data.type);
+            }
+        }
+
+        function startPolling() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(loadMessages, POLLING_INTERVAL);
+            console.log(`🔄 已启动轮询模式，间隔 ${POLLING_INTERVAL/1000} 秒`);
+        }
+
+        // ========== 登录功能 ==========
+
+        async function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
+            const loginBtn = event.target;
 
+            // 基础验证
             if (!username || !password) {
-                alert('Please enter username and password');
+                showToast('请输入用户名和密码', 'error');
                 return;
             }
 
-            if (password !== '123456') {
-                alert('Invalid password');
-                return;
-            }
+            setButtonLoading(loginBtn, true);
 
-            currentUser = username;
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('appScreen').classList.remove('hidden');
-            document.getElementById('sidebarUser').textContent = username;
+            try {
+                // ⚠️ 警告：这是临时的前端验证！生产环境必须使用后端验证！
+                if (APP_CONFIG.SECURITY.ENABLE_FRONTEND_PASSWORD_CHECK) {
+                    if (password !== '123456') {
+                        showToast('密码错误', 'error');
+                        setButtonLoading(loginBtn, false);
+                        return;
+                    }
+                }
 
-            // ✅ 先加载所有用户
-            loadAllUsers().then(() => {
-                checkAdminStatus();
-                loadProfile();
-                loadMessages();
+                // TODO: 正确的做法是调用后端 API 进行验证
+                // const response = await fetch(`${SERVER_URL}/api/login`, {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ username, password })
+                // });
+
+                currentUser = username;
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('appScreen').classList.remove('hidden');
+                document.getElementById('sidebarUser').textContent = username;
+
+                // ✅ 先加载所有用户
+                const usersLoaded = await loadAllUsers();
+
+                if (!usersLoaded) {
+                    showToast('无法连接到服务器，请检查网络连接', 'error');
+                    setButtonLoading(loginBtn, false);
+                    logout();
+                    return;
+                }
+
+                await checkAdminStatus();
+                await loadProfile();
+                await loadMessages();
                 loadContacts();
-                
+
                 const otherContacts = Object.keys(allProfiles).filter(c => c !== currentUser);
                 if (otherContacts.length > 0) {
                     setTimeout(() => selectContact(otherContacts[0]), 500);
                 }
-                
-                // ✅ 添加自动刷新（每 2 秒）
-                setInterval(loadMessages, 2000);
-            });
+
+                // ✅ 启动 WebSocket 或轮询
+                if (APP_CONFIG.FEATURES.ENABLE_WEBSOCKET) {
+                    initWebSocket();
+                } else {
+                    startPolling();
+                }
+
+                showToast(`欢迎回来，${username}！`, 'success');
+
+            } catch (error) {
+                console.error('❌ 登录失败:', error);
+                showToast('登录失败，请稍后重试', 'error');
+            } finally {
+                setButtonLoading(loginBtn, false);
+            }
         }
 
         async function checkAdminStatus() {
@@ -813,16 +1327,22 @@
                 const response = await fetch(`${SERVER_URL}/api/check-admin/${currentUser}`, {
                     headers: { 'ngrok-skip-browser-warning': 'true' }
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
                 const data = await response.json();
                 isCurrentUserAdmin = data.isAdmin;
-                
+
                 if (isCurrentUserAdmin) {
                     document.getElementById('adminBadge').style.display = 'inline-block';
                     document.getElementById('adminSection').style.display = 'block';
-                    loadAllUsers();
+                    await loadAllUsers();
                 }
             } catch (error) {
-                console.error('❌ Error checking admin status:', error);
+                console.error('❌ 检查管理员状态失败:', error);
+                // 不显示错误提示，静默失败
             }
         }
 
@@ -831,15 +1351,21 @@
                 const response = await fetch(`${SERVER_URL}/api/profiles`, {
                     headers: { 'ngrok-skip-browser-warning': 'true' }
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
                 allProfiles = await response.json();
-                
+
                 // ✅ 更新 CONTACTS 为所有用户
                 CONTACTS = Object.keys(allProfiles);
-                
+
                 updateUsersList();
                 return true;
             } catch (error) {
-                console.error('❌ Error loading users:', error);
+                console.error('❌ 加载用户列表失败:', error);
+                showToast('无法加载用户列表', 'error');
                 return false;
             }
         }
@@ -852,7 +1378,7 @@
                 html += `
                     <div class="user-item">
                         <span class="user-item-name">${username}</span>
-                        <button class="user-item-delete" onclick="deleteUser('${username}')">Delete</button>
+                        <button class="user-item-delete" data-username="${username}">Delete</button>
                     </div>
                 `;
             });
@@ -864,9 +1390,26 @@
             currentUser = null;
             isCurrentUserAdmin = false;
             selectedContact = null;
-            if (refreshInterval) clearInterval(refreshInterval);
+
+            // 清理定时器
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+
+            // 关闭 WebSocket 连接
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+
+            // 隐藏连接状态
+            document.getElementById('connectionStatus').style.display = 'none';
+
             document.getElementById('appScreen').classList.add('hidden');
             document.getElementById('loginScreen').classList.remove('hidden');
+
+            showToast('已退出登录', 'info');
         }
 
         async function loadProfile() {
@@ -874,13 +1417,17 @@
                 const response = await fetch(`${SERVER_URL}/api/profile/${currentUser}`, {
                     headers: { 'ngrok-skip-browser-warning': 'true' }
                 });
-                
-                if (response.ok) {
-                    currentProfile = await response.json();
-                    updateProfileDisplay();
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
                 }
+
+                currentProfile = await response.json();
+                updateProfileDisplay();
+
             } catch (error) {
-                console.error('❌ Error loading profile:', error);
+                console.error('❌ 加载个人资料失败:', error);
+                // 静默失败，不打扰用户
             }
         }
 
@@ -906,12 +1453,15 @@
         async function saveProfile() {
             const name = document.getElementById('editName').value.trim();
             const about = document.getElementById('editAbout').value.trim();
-            
+
             if (!name) {
-                alert('Name cannot be empty');
+                showToast('名称不能为空', 'error');
                 return;
             }
-            
+
+            const saveBtn = document.querySelector('.modal-btn-save');
+            setButtonLoading(saveBtn, true);
+
             try {
                 const response = await fetch(`${SERVER_URL}/api/profile/${currentUser}`, {
                     method: 'POST',
@@ -925,16 +1475,21 @@
                         status: 'Online'
                     })
                 });
-                
-                if (response.ok) {
-                    currentProfile = await response.json();
-                    updateProfileDisplay();
-                    closeEditModal();
-                    alert('✅ Profile saved successfully!');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
                 }
+
+                currentProfile = await response.json();
+                updateProfileDisplay();
+                closeEditModal();
+                showToast('个人资料保存成功！', 'success');
+
             } catch (error) {
-                console.error('❌ Error saving profile:', error);
-                alert('Error saving profile');
+                console.error('❌ 保存个人资料失败:', error);
+                showToast('保存失败，请重试', 'error');
+            } finally {
+                setButtonLoading(saveBtn, false);
             }
         }
 
@@ -952,19 +1507,22 @@
 
         async function addNewUser() {
             if (!isCurrentUserAdmin) {
-                alert('Only administrators can add users');
+                showToast('只有管理员可以添加用户', 'error');
                 return;
             }
 
             const username = document.getElementById('newUsername').value.trim();
             const name = document.getElementById('newName').value.trim();
             const about = document.getElementById('newAbout').value.trim();
-            
+
             if (!username) {
-                alert('Username is required');
+                showToast('用户名不能为空', 'error');
                 return;
             }
-            
+
+            const addBtn = document.querySelector('#addUserModal .modal-btn-save');
+            setButtonLoading(addBtn, true);
+
             try {
                 const response = await fetch(`${SERVER_URL}/api/profile/add`, {
                     method: 'POST',
@@ -979,66 +1537,82 @@
                         about: about
                     })
                 });
-                
-                if (response.ok) {
-                    closeAddUserModal();
-                    
-                    // ✅ 重新加载所有用户
-                    await loadAllUsers();
-                    loadContacts();  // ✅ 更新联系人列表
-                    loadMessages();  // ✅ 更新消息列表
-                    
-                    alert(`✅ User "${username}" added successfully!`);
-                } else {
+
+                if (!response.ok) {
                     const error = await response.json();
-                    alert('❌ ' + error.error);
+                    throw new Error(error.error || '添加用户失败');
                 }
+
+                closeAddUserModal();
+
+                // ✅ 重新加载所有用户
+                await loadAllUsers();
+                loadContacts();  // ✅ 更新联系人列表
+                loadMessages();  // ✅ 更新消息列表
+
+                showToast(`用户 "${username}" 添加成功！`, 'success');
+
+                // 清空表单
+                document.getElementById('newUsername').value = '';
+                document.getElementById('newName').value = '';
+                document.getElementById('newAbout').value = '';
+
             } catch (error) {
-                console.error('❌ Error adding user:', error);
-                alert('Error adding user');
+                console.error('❌ 添加用户失败:', error);
+                showToast(error.message || '添加用户失败', 'error');
+            } finally {
+                setButtonLoading(addBtn, false);
             }
         }
 
         async function deleteUser(username) {
             if (!isCurrentUserAdmin) {
-                alert('Only administrators can delete users');
+                showToast('只有管理员可以删除用户', 'error');
                 return;
             }
 
-            if (!confirm(`Delete user "${username}"? This cannot be undone!`)) {
+            if (!confirm(`确定要删除用户 "${username}" 吗？此操作无法撤销！`)) {
                 return;
             }
-            
+
             try {
                 const response = await fetch(`${SERVER_URL}/api/profile/${username}?admin=${currentUser}`, {
                     method: 'DELETE',
                     headers: { 'ngrok-skip-browser-warning': 'true' }
                 });
-                
-                if (response.ok) {
-                    // ✅ 重新加载所有用户
-                    await loadAllUsers();
-                    loadContacts();  // ✅ 更新联系人列表
-                    loadMessages();  // ✅ 更新消息列表
-                    
-                    alert(`✅ User "${username}" deleted!`);
-                } else {
+
+                if (!response.ok) {
                     const error = await response.json();
-                    alert('❌ ' + error.error);
+                    throw new Error(error.error || '删除用户失败');
                 }
+
+                // ✅ 重新加载所有用户
+                await loadAllUsers();
+                loadContacts();  // ✅ 更新联系人列表
+                loadMessages();  // ✅ 更新消息列表
+
+                showToast(`用户 "${username}" 已删除`, 'success');
+
             } catch (error) {
-                console.error('❌ Error deleting user:', error);
-                alert('Error deleting user');
+                console.error('❌ 删除用户失败:', error);
+                showToast(error.message || '删除用户失败', 'error');
             }
         }
 
-        function switchTab(tabName) {
+        function switchTab(tabName, targetElement) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            
+
             const tabEl = document.getElementById(tabName + 'Tab');
             tabEl.style.display = 'flex';
-            event.target.classList.add('active');
+            if (targetElement) {
+                targetElement.classList.add('active');
+            }
+
+            // 移动端：切换标签后自动关闭侧边栏
+            if (window.innerWidth <= 768) {
+                closeMobileSidebar();
+            }
         }
 
         async function loadMessages() {
@@ -1046,14 +1620,24 @@
                 const response = await fetch(`${SERVER_URL}/api/messages`, {
                     headers: { 'ngrok-skip-browser-warning': 'true' }
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
                 allMessages = await response.json();
-                
+
                 updateMessagesList();
                 if (selectedContact) {
                     updateChatMessages();
                 }
+
+                // 首次加载成功后，更新连接状态
+                updateConnectionStatus(true);
             } catch (error) {
-                console.error('❌ Error:', error);
+                console.error('❌ 加载消息失败:', error);
+                updateConnectionStatus(false);
+                // 不频繁显示错误提示，避免打扰用户
             }
         }
 
@@ -1066,7 +1650,7 @@
             let html = '';
             otherContacts.forEach(contact => {
                 html += `
-                    <div class="contact-item" onclick="selectContact('${contact}')">
+                    <div class="contact-item" data-contact="${contact}">
                         <div class="contact-avatar">👤</div>
                         <div class="contact-info">
                             <div class="contact-name">${contact.charAt(0).toUpperCase() + contact.slice(1)}</div>
@@ -1107,7 +1691,7 @@
                 const isActive = selectedContact === contact ? 'active' : '';
                 
                 html += `
-                    <div class="message-item ${isActive}" data-contact="${contact}" onclick="selectContact('${contact}')">
+                    <div class="message-item ${isActive}" data-contact="${contact}">
                         <div class="message-item-info">
                             <div class="message-item-name">${contact.charAt(0).toUpperCase() + contact.slice(1)}</div>
                             <div class="message-item-text">${lastMsg.substring(0, 30)}</div>
@@ -1156,17 +1740,20 @@
 
         async function sendChatMessage() {
             if (!selectedContact) {
-                alert('Select a contact first');
+                showToast('请先选择联系人', 'error');
                 return;
             }
-            
+
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
-            
+
             if (!text) return;
-            
+
+            // 禁用输入框，防止重复发送
+            input.disabled = true;
+
             try {
-                await fetch(`${SERVER_URL}/api/messages`, {
+                const response = await fetch(`${SERVER_URL}/api/messages`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1178,12 +1765,27 @@
                         message: text
                     })
                 });
-                
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
                 input.value = '';
-                await loadMessages();
-                
+
+                // 如果使用 WebSocket，消息会自动更新；否则手动刷新
+                if (!APP_CONFIG.FEATURES.ENABLE_WEBSOCKET || !ws || ws.readyState !== WebSocket.OPEN) {
+                    await loadMessages();
+                }
+
+                // 保持输入框聚焦
+                input.focus();
+
             } catch (error) {
-                console.error('❌ Error:', error);
+                console.error('❌ 发送消息失败:', error);
+                showToast('消息发送失败，请重试', 'error');
+                updateConnectionStatus(false);
+            } finally {
+                input.disabled = false;
             }
         }
 
@@ -1199,16 +1801,262 @@
             return div.innerHTML;
         }
 
+        // ========== 通知功能 ==========
+
+        let notificationPermission = false;
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                console.log('⚠️ 浏览器不支持通知');
+                return false;
+            }
+
+            if (Notification.permission === 'granted') {
+                notificationPermission = true;
+                return true;
+            }
+
+            if (Notification.permission !== 'denied') {
+                const permission = await Notification.requestPermission();
+                notificationPermission = permission === 'granted';
+                return notificationPermission;
+            }
+
+            return false;
+        }
+
+        function showNotification(title, body) {
+            if (!notificationPermission || Notification.permission !== 'granted') {
+                return;
+            }
+
+            // 检查页面是否在后台
+            if (!document.hidden) {
+                return; // 页面在前台，不显示通知
+            }
+
+            const notification = new Notification(title, {
+                body: body,
+                icon: '🚀',
+                tag: 'synergytor-message',
+                requireInteraction: false
+            });
+
+            notification.onclick = () => {
+                window.focus();
+                notification.close();
+            };
+
+            // 5秒后自动关闭
+            setTimeout(() => notification.close(), 5000);
+        }
+
+        function showNotificationPrompt() {
+            const prompt = document.getElementById('notificationPrompt');
+            if (Notification.permission === 'default') {
+                prompt.classList.add('active');
+            }
+        }
+
+        function hideNotificationPrompt() {
+            const prompt = document.getElementById('notificationPrompt');
+            prompt.classList.remove('active');
+        }
+
+        // ========== 移动端菜单功能 ==========
+
+        function toggleMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+        }
+
+        // ========== 消息状态跟踪 ==========
+
+        const pendingMessages = new Map(); // 跟踪待发送的消息
+
+        function generateTempMessageId() {
+            return `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        }
+
+        // ========== 事件监听器初始化 ==========
+
+        function initEventListeners() {
+            // 登录按钮
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', login);
+            }
+
+            // 登录表单 - Enter键登录
+            const passwordInput = document.getElementById('password');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        login();
+                    }
+                });
+            }
+
+            // 退出登录按钮
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', logout);
+            }
+
+            // 导航标签按钮 - 使用事件委托
+            const sidebarNav = document.querySelector('.sidebar-nav');
+            if (sidebarNav) {
+                sidebarNav.addEventListener('click', (e) => {
+                    const navItem = e.target.closest('.nav-item');
+                    if (navItem) {
+                        const tabName = navItem.dataset.tab;
+                        switchTab(tabName, navItem);
+                    }
+                });
+            }
+
+            // 编辑个人资料按钮
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener('click', openEditModal);
+            }
+
+            // 保存个人资料按钮
+            const saveProfileBtn = document.getElementById('saveProfileBtn');
+            if (saveProfileBtn) {
+                saveProfileBtn.addEventListener('click', saveProfile);
+            }
+
+            // 取消编辑按钮
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', closeEditModal);
+            }
+
+            // 添加用户按钮
+            const addUserBtn = document.getElementById('addUserBtn');
+            if (addUserBtn) {
+                addUserBtn.addEventListener('click', openAddUserModal);
+            }
+
+            // 确认添加用户按钮
+            const confirmAddUserBtn = document.getElementById('confirmAddUserBtn');
+            if (confirmAddUserBtn) {
+                confirmAddUserBtn.addEventListener('click', addNewUser);
+            }
+
+            // 取消添加用户按钮
+            const cancelAddUserBtn = document.getElementById('cancelAddUserBtn');
+            if (cancelAddUserBtn) {
+                cancelAddUserBtn.addEventListener('click', closeAddUserModal);
+            }
+
+            // 聊天输入框 - Enter键发送
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendChatMessage();
+                    }
+                });
+            }
+
+            // 发送按钮
+            const sendBtn = document.getElementById('sendBtn');
+            if (sendBtn) {
+                sendBtn.addEventListener('click', sendChatMessage);
+            }
+
+            // 移动端菜单按钮
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleMobileSidebar);
+            }
+
+            // 移动端覆盖层
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', closeMobileSidebar);
+            }
+
+            // 通知权限按钮
+            const allowNotificationBtn = document.getElementById('allowNotificationBtn');
+            if (allowNotificationBtn) {
+                allowNotificationBtn.addEventListener('click', async () => {
+                    await requestNotificationPermission();
+                    hideNotificationPrompt();
+                    if (notificationPermission) {
+                        showToast('已开启消息通知', 'success');
+                    }
+                });
+            }
+
+            const denyNotificationBtn = document.getElementById('denyNotificationBtn');
+            if (denyNotificationBtn) {
+                denyNotificationBtn.addEventListener('click', () => {
+                    hideNotificationPrompt();
+                });
+            }
+
+            // 事件委托 - 删除用户按钮
+            document.addEventListener('click', (e) => {
+                const deleteBtn = e.target.closest('.user-item-delete');
+                if (deleteBtn) {
+                    const username = deleteBtn.dataset.username;
+                    deleteUser(username);
+                    return;
+                }
+
+                // 事件委托 - 选择联系人
+                const contactItem = e.target.closest('.contact-item');
+                if (contactItem) {
+                    const contact = contactItem.dataset.contact;
+                    selectContact(contact);
+                    return;
+                }
+
+                // 事件委托 - 选择消息
+                const messageItem = e.target.closest('.message-item');
+                if (messageItem) {
+                    const contact = messageItem.dataset.contact;
+                    selectContact(contact);
+                    return;
+                }
+
+                // 模态框背景点击关闭
+                const editModal = document.getElementById('editModal');
+                const addUserModal = document.getElementById('addUserModal');
+                if (e.target === editModal) closeEditModal();
+                if (e.target === addUserModal) closeAddUserModal();
+            });
+        }
+
+        // ========== 页面加载完成后初始化 ==========
+
         window.addEventListener('load', () => {
             console.log('✅ App loaded');
             console.log('📡 Server:', SERVER_URL);
-        });
 
-        document.addEventListener('click', (e) => {
-            const editModal = document.getElementById('editModal');
-            const addUserModal = document.getElementById('addUserModal');
-            if (e.target === editModal) closeEditModal();
-            if (e.target === addUserModal) closeAddUserModal();
+            // 初始化所有事件监听器
+            initEventListeners();
+
+            // 登录后显示通知权限提示
+            setTimeout(() => {
+                if (currentUser && Notification.permission === 'default') {
+                    showNotificationPrompt();
+                }
+            }, 3000);
         });
     </script>
 </body>
